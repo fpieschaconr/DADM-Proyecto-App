@@ -20,6 +20,7 @@ function App() {
 
 
   function login() {
+    console.log(1);
   auth()
     .signInWithEmailAndPassword(inputEmail, inputPassword)
     .catch(error => {
@@ -69,7 +70,7 @@ function App() {
           <Text style={styles.forgot_button}>Forgot Password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.loginBtn}>
+        <TouchableOpacity style={styles.loginBtn} onClick={login}>
           <Text style={styles.loginText}>INGRESAR</Text>
         </TouchableOpacity>
       </View>
