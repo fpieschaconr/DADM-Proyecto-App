@@ -1,26 +1,35 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
+  Box,
   Text,
-  View,
   Image,
-  TextInput,
-  TouchableOpacity,
+  Heading,
+  VStack,
+  FormControl,
+  Input,
+  Link,
   Button,
-} from 'react-native';
+  HStack,
+  Center,
+  NativeBaseProvider,
+} from 'native-base';
 import auth from '@react-native-firebase/auth';
-
-import {styles, buttons} from '../styles';
 
 const Login = props => {
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
 
   const login = () => {
-    auth()
-      .signInWithEmailAndPassword(inputEmail, inputPassword)
-      .catch(error => {
-        console.error(error);
-      });
+    if (inputEmail && inputPassword) {
+auth()
+  .signInWithEmailAndPassword(inputEmail, inputPassword)
+  .catch(error => {
+    console.error(error);
+  });
+    } else {
+      console.error("Ingresar correo y contraseña");
+    }
+    
   };
 
   const loginAnon = () => {
@@ -39,38 +48,69 @@ const Login = props => {
   };
 
   return (
-    <View style={styles.container}>
-      <Image style={styles.image} source={require('../../assets/logo.png')} />
-
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Ingresa tu correo"
-          placeholderTextColor="#003f5c"
-          onChangeText={email => setInputEmail(email)}
+    <Center w="100%">
+      <Box safeArea p="2" py="8" w="90%" maxW="290">
+        <Image
+          source={require('../../assets/logo.png')}
+          alt={'Alternate Text'}
+          size="2xl"
         />
-      </View>
+        <Heading
+          size="lg"
+          fontWeight="600"
+          color="coolGray.800"
+          _dark={{
+            color: 'warmGray.50',
+          }}>
+          Welcome
+        </Heading>
+        <Heading
+          mt="1"
+          _dark={{
+            color: 'warmGray.200',
+          }}
+          color="coolGray.600"
+          fontWeight="medium"
+          size="xs">
+          Sign in to continue!
+        </Heading>
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Ingresa tu contraseña"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={password => setInputPassword(password)}
-        />
-      </View>
+        <VStack space={3} mt="5">
+          <FormControl>
+            <FormControl.Label>Correo</FormControl.Label>
+            <Input
+              onChangeText={email => setInputEmail(email)}
+              placeholder="Ingresa tu correo"
+            />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Contraseña</FormControl.Label>
+            <Input
+              type="password"
+              onChangeText={password => setInputPassword(password)}
+              placeholder="Ingresa tu contraseña"
+            />
+            <Link
+              _text={{
+                fontSize: 'xs',
+                fontWeight: '500',
+                color: 'indigo.500',
+              }}
+              alignSelf="flex-end"
+              mt="1">
+              Olvide mi contraseña.
+            </Link>
+          </FormControl>
+          <Button mt="2" colorScheme="indigo" onPress={login}>
+            Ingresar
+          </Button>
 
-      <TouchableOpacity>
-        <Text style={buttons.forgotPassBtn}>Forgot Password?</Text>
-      </TouchableOpacity>
-
-      <Button style={buttons.primary} onPress={login} title="INGRESAR" />
-
-      <TouchableOpacity style={buttons.loginAnonBtn} onPress={loginAnon}>
-        <Text style={styles.loginText}>INGRESO INVITADO</Text>
-      </TouchableOpacity>
-    </View>
+          <Button mt="2" colorScheme="indigo" onPress={loginAnon}>
+            Ingresar Invitado
+          </Button>
+        </VStack>
+      </Box>
+    </Center>
   );
 };
 

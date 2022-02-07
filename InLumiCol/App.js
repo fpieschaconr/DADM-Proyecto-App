@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
+import {NativeBaseProvider} from 'native-base';
 import auth from '@react-native-firebase/auth';
 import Main from './src/Main';
 import Login from './src/pages/Login';
-
 
 const App = () => {
   // Set an initializing state whilst Firebase connects
@@ -23,12 +23,18 @@ const App = () => {
   if (initializing) return null;
 
   if (!user) {
-    return <Login setUser={setUser} setInitializing={setInitializing} />;
+    return (
+      <NativeBaseProvider>
+        <Login setUser={setUser} setInitializing={setInitializing} />
+      </NativeBaseProvider>
+    );
   }
 
   return (
-    <Main user={user} setUser={setUser} setInitializing={setInitializing} />
+    <NativeBaseProvider>
+      <Main user={user} setUser={setUser} setInitializing={setInitializing} />
+    </NativeBaseProvider>
   );
-}
+};
 
 export default App;
