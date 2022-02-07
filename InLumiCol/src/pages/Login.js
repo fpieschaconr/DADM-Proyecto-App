@@ -38,17 +38,6 @@ const Login = props => {
       });
   };
 
-  // Handle user state changes
-  const onAuthStateChanged = user => {
-    props.setUser(user);
-    if (initializing) props.setInitializing(false);
-  };
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require('../../assets/logo.png')} />
