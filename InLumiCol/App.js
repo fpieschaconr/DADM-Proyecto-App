@@ -3,6 +3,8 @@ import {NativeBaseProvider} from 'native-base';
 import auth from '@react-native-firebase/auth';
 import Main from './src/Main';
 import Login from './src/pages/Login';
+import TechMain from './src/pages/TechMain';
+import SuperMain from './src/pages/SuperMain';
 
 const App = () => {
   // Set an initializing state whilst Firebase connects
@@ -29,12 +31,24 @@ const App = () => {
       </NativeBaseProvider>
     );
   }
+  if(user.email==="fpieschaconr@unal.edu.co"){
+    return (
+      <NativeBaseProvider>
+        <SuperMain user={user} setUser={setUser}/>
+      </NativeBaseProvider>
+    );
+  }
 
   return (
     <NativeBaseProvider>
-      <Main user={user} setUser={setUser} setInitializing={setInitializing} />
+      <TechMain user={user} setUser={setUser}/>
     </NativeBaseProvider>
   );
+  // return (
+  //   <NativeBaseProvider>
+  //     <Main user={user} setUser={setUser} setInitializing={setInitializing} />
+  //   </NativeBaseProvider>
+  // );
 };
 
 export default App;
