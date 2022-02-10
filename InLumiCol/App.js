@@ -32,23 +32,19 @@ const App = () => {
     );
   }
   if(user.email==="fpieschaconr@unal.edu.co"){
-    return (
-      <NativeBaseProvider>
-        <SuperMain user={user} setUser={setUser}/>
-      </NativeBaseProvider>
-    );
+      return (
+        <NavigationContainer>
+          <NativeBaseProvider>
+            <SuperMain user={user} setUser={setUser} setInitializing={setInitializing} />
+          </NativeBaseProvider>
+        </NavigationContainer>
+      );
   }
-
-  return (
+   return (
     <NativeBaseProvider>
-      <TechMain user={user} setUser={setUser}/>
+      <SuperMain user={user} setUser={setUser} setInitializing={setInitializing} />
     </NativeBaseProvider>
   );
-  // return (
-  //   <NativeBaseProvider>
-  //     <Main user={user} setUser={setUser} setInitializing={setInitializing} />
-  //   </NativeBaseProvider>
-  // );
 };
 
 export default App;

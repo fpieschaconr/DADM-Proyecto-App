@@ -15,9 +15,10 @@ import {
   Flex,
   useToast
 } from 'native-base';
-import { types } from '../helpers/types';
-import firestore from '@react-native-firebase/firestore';
-import AlertMessage from '../components/AlertMessage';
+import TechMain from './TechMain';
+import RegisterFailure from './RegisterFailure';
+import RegisterAsset from './RegisterAsset';
+
 const messageOptions={
     message:{
         technical:"Esta sección corresponde al detalle de todos los técnicos que estan activos en el municipio",
@@ -30,19 +31,23 @@ const messageOptions={
         active:"Activos",
     }
 }
+
 const SuperMain = ({user})=>{
-    return (
-        <Box  mb="3.5" mt="3.5" alignItems="center">
-            <Button size="sm" variant="outline" colorScheme="secondary">
+    const [state,setState]=useState(0);
+    if (state===0)
+     return (
+        
+        <Box  mb="3.5"  mt="3.5" alignItems="center">
+            <Button w="100%" my="1" size="xs" variant="outline" colorScheme="primary" onPress={()=> setState(3)}>
               Registrar Activo
             </Button>
-            <Button size="sm" variant="outline" colorScheme="secondary">
+            <Button w="100%" my="1" size="xs" variant="outline" colorScheme="secondary" onPress={()=> setState(1)}>
               Registrar Técnico
             </Button>
-            <Button size="sm" variant="outline" colorScheme="secondary">
+            <Button  w="100%" my="1" size="xs" variant="outline" colorScheme="primary" onPress={()=> setState(2)}>
               Registrar Caso
             </Button>
-            <Pressable  mb="3.5" mt="3.5" onPress={() => console.log("Click")}>
+            <Pressable  mb="1" mt="1" onPress={() => console.log("Click")}>
                 <Box maxW="96" borderWidth="1" borderColor="coolGray.300" shadow="3" bg="coolGray.100" p="5" rounded="8">
                     <HStack alignItems="center">
                         <Spacer />
@@ -51,7 +56,7 @@ const SuperMain = ({user})=>{
                         Técnicos
                         </Text>
                         <Text mt="2" fontSize="sm" color="coolGray.700">
-                        El servicio de alumbrado público comprende las actividades de suministro de energía eléctrica al sistema de alumbrado público, la administración, operación, mantenimiento, modernización, reposición y expansión de dicho sistema.
+                        El servicio de alumbrado público comprende las actividades de suministro de energía eléctrica al sistema de alumbrado público, la administración, operación, mantenimiento, modernización, reposición.
                         </Text>
                     <Flex>
                     <Text mt="2" fontSize={12} fontWeight="medium" color="darkBlue.600">
@@ -60,7 +65,7 @@ const SuperMain = ({user})=>{
                 </Flex>
                 </Box>
             </Pressable>
-            <Pressable mb="3.5" mt="3.5" onPress={() => console.log("I'm Pressed")}>
+            <Pressable mb="1" mt="1" onPress={() => console.log("I'm Pressed")}>
                 <Box maxW="96" borderWidth="1" borderColor="coolGray.300" shadow="3" bg="coolGray.100" p="5" rounded="8">
                     <HStack alignItems="center">
                         <Spacer />
@@ -79,7 +84,7 @@ const SuperMain = ({user})=>{
                 </Box>
             </Pressable>
 
-            <Pressable mb="3.5" mt="3.5" onPress={() => console.log("I'm Pressed")}>
+            <Pressable mb="1" mt="1" onPress={() => console.log("I'm Pressed")}>
                 <Box maxW="96" borderWidth="1" borderColor="coolGray.300" shadow="3" bg="coolGray.100" p="5" rounded="8">
                     <HStack alignItems="center">
                         <Spacer />
@@ -98,7 +103,18 @@ const SuperMain = ({user})=>{
                 </Box>
             </Pressable>
         </Box>
-    ); 
+    );
+    
+    
+
+    if(state===1)
+    return <TechMain user={user}/>
+
+    if(state===2)
+    return <RegisterFailure user={user}/>
+
+    if(state===3)
+    return <RegisterAsset user={user}/>
 }
 
 export default SuperMain;

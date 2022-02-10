@@ -7,58 +7,73 @@ import {
   Button,
   Stack,
   Center,
-
-  useToast
+  Heading,
+  useToast,
+  FlatList
 } from 'native-base';
 import { types } from '../helpers/types';
 import firestore from '@react-native-firebase/firestore';
+import SuperMain from './SuperMain';
 
 const TechMain = ({user})=>{
     const toast=useToast();
-    const [active,setActive]=useState(null);
-    const insertCase=()=>{
-        firestore()
-            .collection('Casos')
-            .doc(user.uid)
-            .set({
-                active:types.activeType.transformer,
-                address:"carrera 28 # 134-24",
-                date: new Date(),
-                state:types.state.close,
-                operation:types.operation.installation,
+    const [state,setState]=useState(0);
+    const [cases,setCases]=useState([]);
+    useEffect(() => {
+        const subscriber = firestore()
+          .collection('Casos')
+          .doc(user.uid)
+          .onSnapshot(documentSnapshot => {
+            setCases(documentSnapshot.data());
+            console.log('User data: ', documentSnapshot.data());
+          });
+          console.log(cases);
+        // Stop listening for updates when no longer required
+        return () => subscriber();
+      }, [user.uid]);
 
-            })
-            .then(() => {
-                toast.show({
-                    render: () => {
-                      return <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
-                              Has asignado el caso correctamente!'
-                            </Box>;
-                    }
-                  });
-            })
-            .catch(err=> console.log(err));
-    }
-
-
+      
+    
+    if(state===0)
     return(
-        <Center>         
-            <Stack mt={3} space={4} w="75%" maxW="300px">
-                <Input size="md" placeholder="Dirección:" /> 
-                <Select selectedValue={active} minWidth="200" accessibilityLabel="Activo" placeholder="Tipo Activo" _selectedItem={{
-                    bg: "teal.600",
-                    
-                }} mt={1} onValueChange={itemValue => setActive(itemValue)}>
-                    <Select.Item label={types.activeType.luminary} value="luminary" />
-                    <Select.Item label={types.activeType.post} value="post" />
-                    <Select.Item label={types.activeType.transformer}value="transformer" />
-                </Select>
-            </Stack>
-            <Button mt="2" colorScheme="indigo" onPress={insertCase}>
-                Insertar Dato
-            </Button>
-        </Center>
+    <Box>
+        <Heading fontSize="xl" p="4" pb="3">
+          Casos
+        </Heading>
+        <FlatList data={cases} renderItem={({
+        item
+      }) => <Box borderBottomWidth="1" _dark={{
+        borderColor: "gray.600"
+      }} borderColor="coolGray.200" pl="4" pr="5" py="2">
+              <HStack space={3} justifyContent="space-between">
+                <VStack>
+                  <Text _dark={{
+              color: "warmGray.50"
+            }} color="coolGray.800" bold>
+                    {item.active}
+                  </Text>
+                  <Text color="coolGray.600" _dark={{
+              color: "warmGray.200"
+            }}>
+                    {item.recentText}
+                  </Text>
+                </VStack>
+                <Spacer />
+                <Text fontSize="xs" _dark={{
+            color: "warmGray.50"
+          }} color="coolGray.800" alignSelf="flex-start">
+                  {item.address}
+                </Text>
+              </HStack>
+            </Box>} keyExtractor={item => item.id} />
+            <Button size="sm" variant="subtle" colorScheme="secondary" onPress={()=>setState(1)}>
+            Volver
+          </Button>
+      </Box>
     );
+
+    if(state===1)
+          return <SuperMain user={user} />;
     
 }
 
